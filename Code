@@ -1,0 +1,95 @@
+Here's a step-by-step guide to performing EDA and visualization on your Titanic dataset:  
+
+### **Step 1: Load the Dataset**  
+1. Import necessary libraries:
+   ```python
+   import pandas as pd
+   import numpy as np
+   import matplotlib.pyplot as plt
+   import seaborn as sns
+   ```
+2. Load the dataset:
+   ```python
+   file_path = "/mnt/data/Titanic-Dataset.csv"
+   df = pd.read_csv(file_path)
+   ```
+3. Display basic dataset information:
+   ```python
+   print(df.info())  # Check data types and missing values
+   print(df.head())  # Preview first few rows
+   ```
+
+---
+
+### **Step 2: Data Cleaning**  
+#### **Handling Missing Values**  
+1. Check missing values:
+   ```python
+   print(df.isnull().sum())
+   ```
+2. Fill missing values:
+   - For numerical columns, use median or mean:
+     ```python
+     df['Age'].fillna(df['Age'].median(), inplace=True)
+     ```
+   - For categorical columns, use mode:
+     ```python
+     df['Embarked'].fillna(df['Embarked'].mode()[0], inplace=True)
+     ```
+   - Drop columns with excessive missing data:
+     ```python
+     df.drop(columns=['Cabin'], inplace=True)
+     ```
+
+#### **Removing Duplicates**  
+```python
+df.drop_duplicates(inplace=True)
+```
+
+#### **Handling Outliers**  
+1. Identify outliers using box plots:
+   ```python
+   sns.boxplot(x=df['Fare'])
+   plt.show()
+   ```
+2. Remove extreme outliers:
+   ```python
+   df = df[df['Fare'] < df['Fare'].quantile(0.99)]
+   ```
+
+---
+
+### **Step 3: Data Visualization**  
+#### **1. Bar Chart for Categorical Variables**  
+```python
+sns.countplot(x='Sex', data=df)
+plt.title('Passenger Distribution by Gender')
+plt.show()
+```
+
+#### **2. Histogram for Numeric Distributions**  
+```python
+df['Age'].hist(bins=30, edgecolor='black')
+plt.title('Age Distribution')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.show()
+```
+
+#### **3. Correlation Heatmap for Numeric Features**  
+```python
+plt.figure(figsize=(10,6))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.title('Feature Correlation Heatmap')
+plt.show()
+```
+
+---
+
+### **Step 4: Summary of Insights**  
+- **Gender Distribution:** More male passengers than female.  
+- **Age Distribution:** Most passengers are between 20-40 years old.  
+- **Fare Outliers:** Removed extreme values above the 99th percentile.  
+- **Correlation:** Survival is correlated with fare and class.  
+
+Would you like a detailed analysis or specific insights on any part?
